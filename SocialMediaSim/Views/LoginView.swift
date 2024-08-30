@@ -21,6 +21,12 @@ struct LoginView: View {
     @State var showError: Bool = false
     @State var errorMessage: String = ""
     @State var isLoading: Bool = false
+    
+    //MARK: User Defaults
+    @AppStorage("log_status") var logStatus: Bool = false
+    @AppStorage("user_profile_url") var profileUrl: URL?
+    @AppStorage("user_name") var userNameStored: String = ""
+    @AppStorage("user_UID") var userUID: String = ""
 
     
     var body: some View {
@@ -79,15 +85,33 @@ struct LoginView: View {
     
     func loginUser(){
         isLoading = true
+        closeKeyboard()
         Task{
             do{
                 // with the help of Swift Concurrency Auth can be done with Single Line
                 try await Auth.auth().signIn(withEmail: emailID, password: password)
                 print("User Found")
+                try await fetchUser()
             }catch{
                 await setError(error)
             }
         }
+    }
+    
+    // MARK: If User is Found, Then Fetch User Data from Firestore
+    func fetchUser()async throws{
+        guard let userID = Auth.auth().currentUser?.uid else {return}
+        let user = try await Firestore.firestore().collection("Users").document(userID).getDocument(as: User.self)
+    
+        //MARK: UI Updating Must be Run on Main Thread
+        await MainActor.run(body: {
+            // Setting UserDefaults data and Changing App's Auth Status
+            userNameStored = user.username
+            self.userUID = userUID
+            profileUrl = user.userProfileURL
+            logStatus = true
+            
+        })
     }
     
     func resetPassword(){
@@ -238,6 +262,7 @@ struct RegisterView: View{
     
     func registerUser(){
         isLoading = true
+        closeKeyboard()
         Task{
             do{
                 // Step 1: Creating Firebase Account
@@ -300,6 +325,11 @@ struct RegisterView: View{
 
 //MARK: View Extensions For UI Building
 extension View{
+    
+    // Closing all active keyboards
+    func closeKeyboard(){
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
     
     //MARK: Disabling with opacity
     func disableWithOpacity(_ condition: Bool)-> some View{
