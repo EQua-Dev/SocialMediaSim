@@ -7,14 +7,17 @@
 
 import SwiftUI
 import PhotosUI //For Native SwiftUI Image Picker
+import FirebaseAuth
 
 struct LoginView: View {
     // MARK: User Details
     
     @State var emailID: String = ""
     @State var password: String = ""
-        //MARK: View Properties
+    //MARK: View Properties
     @State var createAccount: Bool = false
+    @State var showError: Bool = false
+    @State var errorMessage: String = ""
     
     var body: some View {
         VStack(spacing: 10){
@@ -29,14 +32,14 @@ struct LoginView: View {
                 SecureField("Password", text: $password).textContentType(.emailAddress).border(1, .gray.opacity(0.5))
                 
                 
-                Button("Reset password?", action: {})
+                Button("Reset password?", action: resetPassword)
                     .font(.callout)
                     .fontWeight(.medium)
                     .tint(.black)
                     .hAlign(.trailing)
                 
                 Button{
-                    
+                    loginUser()
                 } label: {
                     //MARK: Login Button
                     Text("Login").foregroundColor(.white).hAlign(.center)
@@ -62,7 +65,44 @@ struct LoginView: View {
             .fullScreenCover(isPresented: $createAccount){
                 RegisterView()
             }
+        
+        // MARK: Displaying Alert
+            .alert(errorMessage, isPresented: $showError, actions:{})
     }
+    
+    func loginUser(){
+        Task{
+            do{
+                // with the help of Swift Concurrency Auth can be done with Single Line
+                try await Auth.auth().signIn(withEmail: emailID, password: password)
+                print("User Found")
+            }catch{
+                await setError(error)
+            }
+        }
+    }
+    
+    func resetPassword(){
+        Task{
+            do{
+                // with the help of Swift Concurrency Auth can be done with Single Line
+                try await Auth.auth().sendPasswordReset(withEmail: emailID)
+                print("Link Sent")
+            }catch{
+                await setError(error)
+            }
+        }
+    }
+    
+    // MARK: Displaying Errors VIA Alert
+    func setError(_ error: Error) async {
+        // MARK: UI Must be Updated on Main Thread
+        await MainActor.run(body: {
+            errorMessage = error.localizedDescription
+            showError.toggle()
+        })
+    }
+    
 }
 
 // MARK: Register View
@@ -80,55 +120,55 @@ struct RegisterView: View{
     @State var showImagePicker: Bool = false
     @State var photoItem: PhotosPickerItem?
     
-
+    
     var body: some View{
         
-            VStack(spacing: 10){
-                
-                Text("Let's Register\nAccount").font(.largeTitle.bold())
-                    .hAlign(.leading)
-                
-                Text("Hello User, have a wonderful journey").font(.title3).hAlign(.leading)
-                
-                // MARK: For Smaller Size Optimization
-                /**
-                 Why ViewThatFits: It automatically enables scrolling on smaller screen sizes
-                 */
-                ViewThatFits{
-                    ScrollView(.vertical, showsIndicators: false){
-                        HelperView()
-                    }
+        VStack(spacing: 10){
+            
+            Text("Let's Register\nAccount").font(.largeTitle.bold())
+                .hAlign(.leading)
+            
+            Text("Hello User, have a wonderful journey").font(.title3).hAlign(.leading)
+            
+            // MARK: For Smaller Size Optimization
+            /**
+             Why ViewThatFits: It automatically enables scrolling on smaller screen sizes
+             */
+            ViewThatFits{
+                ScrollView(.vertical, showsIndicators: false){
                     HelperView()
                 }
+                HelperView()
+            }
+            
+            
+            //MARK: Register Button
+            HStack{
+                Text("Already have an account?").foregroundColor(.gray)
                 
-          
-                //MARK: Register Button
-                HStack{
-                    Text("Already have an account?").foregroundColor(.gray)
-                    
-                    Button("Login Now"){
-                        dismiss()
-                    }.fontWeight(.bold).foregroundColor(.black)
-                }.font(.callout)
-                    .vAlign(.bottom)
-                
-                
-            }.vAlign(.top)
-                .padding(15)
-                .photosPicker(isPresented: $showImagePicker, selection: $photoItem)
-                .onChange(of: photoItem){ newValue in
-                    // MARK: Extracting UIImage from PhotoItem
-                    if let newValue{
-                        Task{
-                            do{
-                                guard let imageData = try await newValue.loadTransferable(type: Data.self) else{return}
-                                
-                                // MARK: UI Must Be Updated on Main Thread
-                                await MainActor.run(body: {userProfilePicData = imageData})
-                            }
+                Button("Login Now"){
+                    dismiss()
+                }.fontWeight(.bold).foregroundColor(.black)
+            }.font(.callout)
+                .vAlign(.bottom)
+            
+            
+        }.vAlign(.top)
+            .padding(15)
+            .photosPicker(isPresented: $showImagePicker, selection: $photoItem)
+            .onChange(of: photoItem){ newValue in
+                // MARK: Extracting UIImage from PhotoItem
+                if let newValue{
+                    Task{
+                        do{
+                            guard let imageData = try await newValue.loadTransferable(type: Data.self) else{return}
+                            
+                            // MARK: UI Must Be Updated on Main Thread
+                            await MainActor.run(body: {userProfilePicData = imageData})
                         }
                     }
                 }
+            }
     }
     @ViewBuilder
     func HelperView()->some View{
@@ -141,7 +181,7 @@ struct RegisterView: View{
                 }else{
                     Image(systemName:"person.crop.circle")
                         .resizable()
-                        .aspectRatio(contentMode: .fill)
+                        .aspectRatio(contentMode: .fill).foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                 }
             }
             .frame(width: 85, height: 85)
@@ -160,9 +200,9 @@ struct RegisterView: View{
             TextField("About You", text: $userBio, axis: .vertical).frame(minHeight: 100, alignment: .top).textContentType(.emailAddress).border(1, .gray.opacity(0.5))
             
             TextField("Bio Link (Optional", text: $userBioLink).textContentType(.emailAddress).border(1, .gray.opacity(0.5))
-         
+            
             Button{
-                
+                registerUser()
             } label: {
                 //MARK: Login Button
                 Text("Sign Up").foregroundColor(.white).hAlign(.center)
@@ -171,6 +211,11 @@ struct RegisterView: View{
         }
         
     }
+    
+    func registerUser(){
+        
+    }
+    
 }
 
 #Preview {
