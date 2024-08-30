@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		452B6EAE2C818EDA001C3023 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 452B6EAD2C818EDA001C3023 /* FirebaseFirestore */; };
+		452B6EB02C818EDA001C3023 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 452B6EAF2C818EDA001C3023 /* FirebaseStorage */; };
+		452B6EB22C81AC80001C3023 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452B6EB12C81AC80001C3023 /* User.swift */; };
+		452B6EB42C81BCC0001C3023 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452B6EB32C81BCC0001C3023 /* LoadingView.swift */; };
 		45DDB1232C7DE60800D9D2A0 /* SocialMediaSimApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DDB1222C7DE60800D9D2A0 /* SocialMediaSimApp.swift */; };
 		45DDB1252C7DE60800D9D2A0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DDB1242C7DE60800D9D2A0 /* ContentView.swift */; };
 		45DDB1272C7DE60A00D9D2A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45DDB1262C7DE60A00D9D2A0 /* Assets.xcassets */; };
@@ -17,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		452B6EB12C81AC80001C3023 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		452B6EB32C81BCC0001C3023 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		45DDB11F2C7DE60800D9D2A0 /* SocialMediaSim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SocialMediaSim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45DDB1222C7DE60800D9D2A0 /* SocialMediaSimApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialMediaSimApp.swift; sourceTree = "<group>"; };
 		45DDB1242C7DE60800D9D2A0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -32,17 +38,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				45DDB1342C7DF99F00D9D2A0 /* FirebaseAuth in Frameworks */,
+				452B6EAE2C818EDA001C3023 /* FirebaseFirestore in Frameworks */,
+				452B6EB02C818EDA001C3023 /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		452B6EAC2C818EDA001C3023 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		45DDB1162C7DE60700D9D2A0 = {
 			isa = PBXGroup;
 			children = (
 				45DDB1212C7DE60800D9D2A0 /* SocialMediaSim */,
 				45DDB1202C7DE60800D9D2A0 /* Products */,
+				452B6EAC2C818EDA001C3023 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -62,6 +78,7 @@
 				45DDB1302C7DEE0600D9D2A0 /* GoogleService-Info.plist */,
 				45DDB1222C7DE60800D9D2A0 /* SocialMediaSimApp.swift */,
 				45DDB1242C7DE60800D9D2A0 /* ContentView.swift */,
+				452B6EB32C81BCC0001C3023 /* LoadingView.swift */,
 				45DDB1262C7DE60A00D9D2A0 /* Assets.xcassets */,
 				45DDB1282C7DE60A00D9D2A0 /* Preview Content */,
 			);
@@ -87,6 +104,7 @@
 		45DDB1362C7E10DA00D9D2A0 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				452B6EB12C81AC80001C3023 /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -109,6 +127,8 @@
 			name = SocialMediaSim;
 			packageProductDependencies = (
 				45DDB1332C7DF99F00D9D2A0 /* FirebaseAuth */,
+				452B6EAD2C818EDA001C3023 /* FirebaseFirestore */,
+				452B6EAF2C818EDA001C3023 /* FirebaseStorage */,
 			);
 			productName = SocialMediaSim;
 			productReference = 45DDB11F2C7DE60800D9D2A0 /* SocialMediaSim.app */;
@@ -168,8 +188,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				452B6EB22C81AC80001C3023 /* User.swift in Sources */,
 				45DDB1382C7E110600D9D2A0 /* LoginView.swift in Sources */,
 				45DDB1252C7DE60800D9D2A0 /* ContentView.swift in Sources */,
+				452B6EB42C81BCC0001C3023 /* LoadingView.swift in Sources */,
 				45DDB1232C7DE60800D9D2A0 /* SocialMediaSimApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -389,6 +411,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		452B6EAD2C818EDA001C3023 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 45DDB1322C7DF99E00D9D2A0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		452B6EAF2C818EDA001C3023 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 45DDB1322C7DF99E00D9D2A0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
 		45DDB1332C7DF99F00D9D2A0 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 45DDB1322C7DF99E00D9D2A0 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
