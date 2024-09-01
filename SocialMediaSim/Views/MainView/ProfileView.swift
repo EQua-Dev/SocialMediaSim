@@ -22,10 +22,14 @@ struct ProfileView: View {
     var body: some View {
         NavigationStack{
             ScrollView(.vertical, showsIndicators: false){
-                
+                if let myProfile{
+                    Text(myProfile.username)
+                }
             }
             .refreshable{
                 // MARK: Refresh User Data
+                myProfile = nil
+                await fetchUserData()
             }
             .navigationTitle("My Profile")
             .toolbar{
@@ -51,8 +55,28 @@ struct ProfileView: View {
             LoadingView(show: $isLoading)
         }
         .alert(errorMessage, isPresented: $showError){}
+        .task {
+            
+            /**
+             This Modifier is like onAppear. So, fetching for the first time only
+             - Since Task is an alternative to onAppear, which is an async call, whwneve the tab is changed and reopened, it wil be called like onAppear.
+             - That's why we're limiting it ti the inital fetch (First Time) only
+             */
+            if myProfile != nil{return}
+            // MARK: Initial Fetch
+            await fetchUserData()
+        }
     }
     
+    //MARK: Fetching User Data
+    func fetchUserData()async{
+        guard let userUID = Auth.auth().currentUser?.uid else{return}
+        guard let user = try? await Firestore.firestore().collection("Users").document(userUID).getDocument(as: User.self)
+        else {return}
+        await MainActor.run {
+            myProfile = user
+        }
+    }
     //MARK: Logging User Out
     func logOutUser(){
         try? Auth.auth().signOut()
