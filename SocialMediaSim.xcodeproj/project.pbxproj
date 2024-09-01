@@ -11,6 +11,10 @@
 		452B6EB02C818EDA001C3023 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 452B6EAF2C818EDA001C3023 /* FirebaseStorage */; };
 		452B6EB22C81AC80001C3023 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452B6EB12C81AC80001C3023 /* User.swift */; };
 		452B6EB42C81BCC0001C3023 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452B6EB32C81BCC0001C3023 /* LoadingView.swift */; };
+		452B6EB82C83E22E001C3023 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452B6EB72C83E22E001C3023 /* RegisterView.swift */; };
+		452B6EBB2C83E34E001C3023 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452B6EBA2C83E34E001C3023 /* View+Extensions.swift */; };
+		452B6EBD2C83E3D6001C3023 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452B6EBC2C83E3D6001C3023 /* MainView.swift */; };
+		452B6EBF2C83E5E7001C3023 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452B6EBE2C83E5E7001C3023 /* ProfileView.swift */; };
 		45DDB1232C7DE60800D9D2A0 /* SocialMediaSimApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DDB1222C7DE60800D9D2A0 /* SocialMediaSimApp.swift */; };
 		45DDB1252C7DE60800D9D2A0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DDB1242C7DE60800D9D2A0 /* ContentView.swift */; };
 		45DDB1272C7DE60A00D9D2A0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45DDB1262C7DE60A00D9D2A0 /* Assets.xcassets */; };
@@ -23,6 +27,10 @@
 /* Begin PBXFileReference section */
 		452B6EB12C81AC80001C3023 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		452B6EB32C81BCC0001C3023 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		452B6EB72C83E22E001C3023 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		452B6EBA2C83E34E001C3023 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		452B6EBC2C83E3D6001C3023 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		452B6EBE2C83E5E7001C3023 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		45DDB11F2C7DE60800D9D2A0 /* SocialMediaSim.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SocialMediaSim.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45DDB1222C7DE60800D9D2A0 /* SocialMediaSimApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialMediaSimApp.swift; sourceTree = "<group>"; };
 		45DDB1242C7DE60800D9D2A0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -51,6 +59,32 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		452B6EB52C83E207001C3023 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				45DDB1372C7E110600D9D2A0 /* LoginView.swift */,
+				452B6EB72C83E22E001C3023 /* RegisterView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		452B6EB62C83E216001C3023 /* MainView */ = {
+			isa = PBXGroup;
+			children = (
+				452B6EBC2C83E3D6001C3023 /* MainView.swift */,
+				452B6EBE2C83E5E7001C3023 /* ProfileView.swift */,
+			);
+			path = MainView;
+			sourceTree = "<group>";
+		};
+		452B6EB92C83E2F0001C3023 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				452B6EBA2C83E34E001C3023 /* View+Extensions.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		45DDB1162C7DE60700D9D2A0 = {
@@ -96,7 +130,9 @@
 		45DDB1352C7E10C900D9D2A0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				45DDB1372C7E110600D9D2A0 /* LoginView.swift */,
+				452B6EB92C83E2F0001C3023 /* Helpers */,
+				452B6EB62C83E216001C3023 /* MainView */,
+				452B6EB52C83E207001C3023 /* Auth */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -189,8 +225,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				452B6EB22C81AC80001C3023 /* User.swift in Sources */,
+				452B6EBF2C83E5E7001C3023 /* ProfileView.swift in Sources */,
+				452B6EBD2C83E3D6001C3023 /* MainView.swift in Sources */,
 				45DDB1382C7E110600D9D2A0 /* LoginView.swift in Sources */,
 				45DDB1252C7DE60800D9D2A0 /* ContentView.swift in Sources */,
+				452B6EBB2C83E34E001C3023 /* View+Extensions.swift in Sources */,
+				452B6EB82C83E22E001C3023 /* RegisterView.swift in Sources */,
 				452B6EB42C81BCC0001C3023 /* LoadingView.swift in Sources */,
 				45DDB1232C7DE60800D9D2A0 /* SocialMediaSimApp.swift in Sources */,
 			);
