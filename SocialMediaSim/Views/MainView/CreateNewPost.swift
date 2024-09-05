@@ -133,11 +133,63 @@ struct CreateNewPost: View {
                 }
                 
             }
+            .alert(errorMessage, isPresented: $showError){
+                
+            }
+        /// - Loading View
+            .overlay{
+                LoadingView(show: $isLoading)
+            }
     }
     
     //MARK: Post Content To Firebase
     func createPost(){
-        
+        isLoading = true
+        showKeyboard = false
+        Task{
+            do{
+                guard let profileUrl = profileUrl else{return}
+                /// Step 1: Uploading Image if any
+                /// Used to delete the Post ()
+                let imageReferenceID = "\(userUID)\(Date())"
+                let storageRef = Storage.storage().reference().child("Post_Images").child(imageReferenceID)
+                if let postImageData{
+                    let _ = try await storageRef.putDataAsync(postImageData)
+                    let downloadURL = try await storageRef.downloadURL()
+                    
+                    /// Step 3: Create Post Object with Image Id And URL
+                    let post = Post(text: postText, userName: userNameStored, userUID: userUID, userProfileURL: profileUrl)
+                    try await createDocumentAtFirebase(post)
+                }else{
+                    /// Step 2: Directly Post Text Data to Firebase (Since there is no image present)
+                    let post = Post(text: postText, userName: userNameStored, userUID: userUID, userProfileURL: profileUrl)
+                    try await createDocumentAtFirebase(post)
+                }
+            }catch{
+                await setError(error)
+            }
+        }
+    }
+    
+    func createDocumentAtFirebase(_ post: Post) async throws{
+        /// - Wrtitng Document to Firebase Firestore
+        let _ = try Firestore.firestore().collection("Posts").addDocument(from: post, completion: { error in
+            if error == nil {
+                /// Post successfully stored in Firebase
+                isLoading = false
+                onPost(post)
+                dismiss()
+            }
+            
+        })
+    }
+    
+    // MARK: Displaying Error as Alert
+    func setError(_ error: Error) async{
+        await MainActor.run(body: {
+            errorMessage = error.localizedDescription
+            showError.toggle()
+        })
     }
 }
 

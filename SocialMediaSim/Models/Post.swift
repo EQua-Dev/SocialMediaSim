@@ -22,7 +22,7 @@ struct Post: Identifiable, Codable{
     //MARK: User Basic Info
     var userName: String
     var userUID: String
-    var userProfileURL: String
+    var userProfileURL: URL
     
     
     enum CodingKeys: CodingKey{
