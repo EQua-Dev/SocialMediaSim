@@ -158,7 +158,7 @@ struct CreateNewPost: View {
                     let downloadURL = try await storageRef.downloadURL()
                     
                     /// Step 3: Create Post Object with Image Id And URL
-                    let post = Post(text: postText, userName: userNameStored, userUID: userUID, userProfileURL: profileUrl)
+                    let post = Post(text: postText, imageURL: downloadURL, imageReferenceID: imageReferenceID, userName: userNameStored, userUID: userUID, userProfileURL: profileUrl)
                     try await createDocumentAtFirebase(post)
                 }else{
                     /// Step 2: Directly Post Text Data to Firebase (Since there is no image present)
@@ -173,11 +173,14 @@ struct CreateNewPost: View {
     
     func createDocumentAtFirebase(_ post: Post) async throws{
         /// - Wrtitng Document to Firebase Firestore
-        let _ = try Firestore.firestore().collection("Posts").addDocument(from: post, completion: { error in
+        let doc = Firestore.firestore().collection("Posts").document()
+        let _ = try doc.setData(from: post, completion: { error in
             if error == nil {
                 /// Post successfully stored in Firebase
                 isLoading = false
-                onPost(post)
+                var updatedPost = post
+                updatedPost.id = doc.documentID
+                onPost(updatedPost)
                 dismiss()
             }
             
