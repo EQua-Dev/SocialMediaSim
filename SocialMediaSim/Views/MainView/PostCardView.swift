@@ -54,6 +54,46 @@ struct PostCardView: View {
             }
         }
         .hAlign(.leading)
+        .overlay(alignment: .topTrailing, content: {
+            /// Displaying the Delete Button (if its the post author)
+            if post.userUID == userUID{
+                Menu{
+                    Button("Delete Button", role: .destructive, action: deletePost)
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .font(.caption)
+                        .rotationEffect(.init(degrees: -90))
+                        .foregroundColor(.black)
+                        .padding(8)
+                        .contentShape(Rectangle())
+                }
+                .offset(x: 8)
+            }
+        })
+        .onAppear{
+            /// When the post is visible on the screen, the document listener is added; otherwise, the listener is removed
+            /// SInce we used LazyVStack ealier, onAppear() and onDisappear() will be called when the view enters or leaves the screen, respectively
+            if docListener == nil{ /// adding only once
+                guard let postID = post.id else {return}
+                docListener = Firestore.firestore().collection("Posts").document(postID).addSnapshotListener({ snapshot,
+                    error in
+                    if let snapshot{
+                        if snapshot.exists{
+                            /// - Document Updated
+                            /// Fetching Updated Document
+                            if let updatedPost = try? snapshot.data(as: Post.self){
+                                onUpdate(updatedPost)
+                            }
+                        }else{
+                            /// Document deleted
+                            onDelete()
+                        }
+                    }
+                    
+                })
+            }
+            
+        }
     }
     
     @ViewBuilder
@@ -69,7 +109,7 @@ struct PostCardView: View {
                 .foregroundColor(.gray)
             
             Button(action: dislikePost) {
-                Image(systemName: post.dislikedIDs.contains(userUID) ? "hand.thumbsdown" : "hand.thumbsdown")
+                Image(systemName: post.dislikedIDs.contains(userUID) ? "hand.thumbsdown.fill" : "hand.thumbsdown")
             }.padding(.leading, 15)
             Text("\(post.dislikedIDs.count)")
                 .font(.caption)
@@ -118,6 +158,23 @@ struct PostCardView: View {
                     "dislikedIDs": FieldValue.arrayUnion([userUID]),
                     "likedIDs": FieldValue.arrayRemove([userUID])
                 ])
+            }
+        }
+    }
+    
+    /// - Deleting Post
+    func deletePost() {
+        Task{
+            /// Step 1: Delete Image from the Firebase Storage if present
+            do{
+                if post.imageReferenceID != ""{
+                    try await Storage.storage().reference().child("Post_Images").child(post.imageReferenceID).delete()
+                }
+                /// Step 2: Delete Firestore Document
+                guard let postID = post.id else {return}
+                try await Firestore.firestore().collection("Posts").document(postID).delete()
+            }catch{
+                print(error.localizedDescription)
             }
         }
     }

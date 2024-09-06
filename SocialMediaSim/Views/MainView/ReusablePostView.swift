@@ -52,9 +52,18 @@ struct ReusablePostView: View {
     func Posts()-> some View{
         ForEach(posts){post in
             PostCardView(post: post){ updatedPost in
-                
+                /// Updating the Post in the Array
+                if let index = posts.firstIndex(where: {post in
+                    post.id == updatedPost.id
+                }){
+                    posts[index].likedIDs = updatedPost.likedIDs
+                    posts[index].dislikedIDs = updatedPost.dislikedIDs
+                }
             } onDelete: {
-                
+                /// Removing Post From the Array
+                withAnimation(.easeInOut(duration: 0.25)){
+                    posts.removeAll{post == $0}
+                }
             }
             
             Divider().padding(.horizontal,-15)
