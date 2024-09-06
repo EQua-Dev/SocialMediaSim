@@ -18,7 +18,7 @@ struct Post: Identifiable, Codable{
     var imageReferenceID: String = ""
     var publishedDate: Date = Date()
     var likedIDs: [String] = []
-    var disliked: [String] = []
+    var dislikedIDs: [String] = []
     //MARK: User Basic Info
     var userName: String
     var userUID: String
@@ -32,7 +32,7 @@ struct Post: Identifiable, Codable{
         case imageReferenceID //Used for deletion
         case publishedDate
         case likedIDs
-        case disliked
+        case dislikedIDs
         case userName
         case userUID
         case userProfileURL

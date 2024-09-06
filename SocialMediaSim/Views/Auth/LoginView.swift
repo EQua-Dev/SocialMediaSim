@@ -100,8 +100,8 @@ struct LoginView: View {
     
     // MARK: If User is Found, Then Fetch User Data from Firestore
     func fetchUser()async throws{
-        guard let userID = Auth.auth().currentUser?.uid else {return}
-        let user = try await Firestore.firestore().collection("Users").document(userID).getDocument(as: User.self)
+        guard let userUID = Auth.auth().currentUser?.uid else {return}
+        let user = try await Firestore.firestore().collection("Users").document(userUID).getDocument(as: User.self)
     
         //MARK: UI Updating Must be Run on Main Thread
         await MainActor.run(body: {
